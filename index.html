@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rama the Great — Control Your Capital.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf9f7;
+      --surface: #ffffff;
+      --ink: #1a1a18;
+      --ink-muted: #888880;
+      --ink-faint: #d4d3cf;
+      --accent: #c8a96e;
+      --accent-dark: #a8893e;
+      --wa-green: #25D366;
+      --wa-green-dark: #1ebe5d;
+      --radius: 2px;
+      --transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 64px;
+      background: rgba(250,249,247,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--ink-faint);
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-wa {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--wa-green);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .nav-wa:hover { background: var(--wa-green-dark); transform: translateY(-1px); }
+    .nav-wa svg { width: 16px; height: 16px; fill: #fff; flex-shrink: 0; }
+
+    /* ── HERO ── */
+    .hero {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 5vw 80px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(200,169,110,0.09) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      max-width: 700px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 1rem;
+      color: var(--ink-muted);
+      max-width: 420px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      margin-top: 40px;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .hero-cta:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(200,169,110,0.25);
+    }
+
+    .hero-divider {
+      width: 48px; height: 1px;
+      background: var(--ink-faint);
+      margin: 72px auto 0;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      text-align: center;
+      padding: 72px 5vw 40px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    .section-header p {
+      margin-top: 10px;
+      color: var(--ink-muted);
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    /* ── PRODUCTS GRID ── */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2px;
+      padding: 0 5vw 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: var(--surface);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+      animation: fadeUp 0.5s ease both;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(26,26,24,0.08);
+      z-index: 1;
+    }
+
+    .product-image {
+      width: 100%; aspect-ratio: 4/5;
+      background: #f0ede8;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .product-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-image img { transform: scale(1.04); }
+
+    .product-placeholder {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      color: var(--ink-faint);
+      user-select: none;
+    }
+
+    .product-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: var(--radius);
+    }
+
+    .product-info {
+      padding: 18px 20px 20px;
+    }
+
+    .product-category {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.55;
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+
+    .product-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .product-price span {
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: var(--ink-muted);
+      font-family: 'DM Sans', sans-serif;
+      margin-left: 2px;
+    }
+
+    .btn-order {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--wa-green);
+      color: #fff;
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 40px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .btn-order:hover { background: var(--wa-green-dark); transform: scale(1.03); }
+    .btn-order svg { width: 14px; height: 14px; fill: #fff; flex-shrink: 0; }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      background: var(--ink);
+      color: #fff;
+      padding: 80px 5vw;
+      text-align: center;
+    }
+
+    .how h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 300;
+      margin-bottom: 48px;
+      color: #fff;
+    }
+
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .step {
+      flex: 1 1 200px;
+      max-width: 220px;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -8px; top: 30px;
+      font-size: 1.2rem;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      color: var(--accent);
+      opacity: 0.5;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      padding: 80px 5vw;
+      text-align: center;
+      background: var(--bg);
+    }
+
+    .cta-banner h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+
+    .cta-banner p {
+      color: var(--ink-muted);
+      font-size: 0.9rem;
+      font-weight: 300;
+      margin-bottom: 36px;
+    }
+
+    .btn-wa-big {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--wa-green);
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .btn-wa-big:hover {
+      background: var(--wa-green-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.4);
+    }
+    .btn-wa-big svg { width: 20px; height: 20px; fill: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--ink-faint);
+      padding: 28px 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .footer-note {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger product cards */
+    .product-card:nth-child(1) { animation-delay: 0.05s; }
+    .product-card:nth-child(2) { animation-delay: 0.10s; }
+    .product-card:nth-child(3) { animation-delay: 0.15s; }
+    .product-card:nth-child(4) { animation-delay: 0.20s; }
+    .product-card:nth-child(5) { animation-delay: 0.25s; }
+    .product-card:nth-child(6) { animation-delay: 0.30s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .products { padding: 0 0 60px; gap: 1px; }
+      .step::after { display: none; }
+      .steps { flex-direction: column; align-items: center; gap: 32px; }
+      nav { padding: 0 4vw; }
+      .nav-logo { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Rama the Great</a>
+    <a class="nav-wa" href="https://wa.me/6285641610723?text=Hi%2C%20I%27d%20like%20to%20order!" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat with us
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Rama the Great</p>
+    <h1><em>Control</em> Your Capital.</h1>
+    <p class="hero-sub">Tools, templates, and guidance to help you take full command of your finances and build real wealth — on your terms.</p>
+    <a class="hero-cta" href="#products">Shop the Collection</a>
+    <div class="hero-divider"></div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <div class="section-header">
+    <h2>Our Products</h2>
+    <p>Browse below — tap "Order via WhatsApp" to get yours.</p>
+  </div>
+
+  <section class="products" id="products">
+
+    <!-- CARD 1 -->
+    <article class="product-card">
+      <div class="product-image">
+        <img src="Rama.png" alt="">
+        <span class="product-badge">New</span>
+      </div>
+      <div class="product-info">
+        <p class="product-category">Digital</p>
+        <h3 class="product-name">Notion Planner Template</h3>
+        <p class="product-desc">A complete productivity system for creatives and freelancers. Weekly reviews, project trackers, and habit boards included.</p>
+        <div class="product-footer">
+          <p class="product-price">Rp 89k <span>/ once</span></p>
+          <a class="btn-order" href="https://wa.me/6285641610723?text=Hi%2C%20I%27d%20like%20to%20order%20the%20Notion%20Planner%20Template!" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Order
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 2 -->
+    <article class="product-card">
+      <div class="product-image">
+        <img src="Rama.png" alt="">
+      </div>
+      <div class="product-info">
+        <p class="product-category">Physical</p>
+        <h3 class="product-name">Canvas Tote Bag</h3>
+        <p class="product-desc">Heavy-duty 400gsm natural canvas. Fits a 15" laptop, a water bottle, and everything in between. Minimal logo print.</p>
+        <div class="product-footer">
+          <p class="product-price">Rp 150k <span>/ pcs</span></p>
+          <a class="btn-order" href="https://wa.me/6285641610723?text=Hi%2C%20I%27d%20like%20to%20order%20the%20Canvas%20Tote%20Bag!" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Order
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 3 -->
+    <article class="product-card">
+      <div class="product-image">
+        <img src="Rama.png" alt="">
+      </div>
+      <div class="product-info">
+        <p class="product-category">Service</p>
+        <h3 class="product-name">1-on-1 Coaching Session</h3>
+        <p class="product-desc">60-minute focused session. Bring your goals, questions, or challenges — we'll work through them together.</p>
+        <div class="product-footer">
+          <p class="product-price">Rp 350k <span>/ session</span></p>
+          <a class="btn-order" href="https://wa.me/6285641610723?text=Hi%2C%20I%27d%20like%20to%20book%20a%20Coaching%20Session!" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Order
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CARD 4 -->
+    <article class="product-card">
+      <div class="product-image">
+        <img src="Rama.png" alt="">
+      </div>
+      <div class="product-info">
+        <p class="product-category">Digital</p>
+        <h3 class="product-name">Lightroom Preset Pack</h3>
+        <p class="product-desc">12 film-inspired presets for photo editing. Works on mobile and desktop. One-click install, lifetime access.</p>
+        <div class="product-footer">
+          <p class="product-price">Rp 75k <span>/ pack</span></p>
+          <a class="btn-order" href="https://wa.me/6285641610723?text=Hi%2C%20I%27d%20like%20to%20order%20the%20Lightroom%20Preset%20Pack!" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Order
+          </a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <p class="step-num">01</p>
+        <p class="step-title">Browse</p>
+        <p class="step-desc">Explore the products above and find what fits your goals.</p>
+      </div>
+      <div class="step">
+        <p class="step-num">02</p>
+        <p class="step-title">Tap Order</p>
+        <p class="step-desc">Hit the green button — it opens WhatsApp with a pre-filled message.</p>
+      </div>
+      <div class="step">
+        <p class="step-num">03</p>
+        <p class="step-title">Chat & Pay</p>
+        <p class="step-desc">We confirm your order, send payment details, and deliver fast.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <h2>Ready to take control?</h2>
+    <p>Have a question or not sure which product is right for you? Just ask.</p>
+    <a class="btn-wa-big" href="https://wa.me/6285641610723?text=Hi%20Rama%2C%20I%27d%20like%20to%20know%20more%20about%20your%20products!" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat on WhatsApp
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">Rama the Great</span>
+    <span class="footer-note">Control Your Capital. &copy; 2026</span>
+  </footer>
+
+</body>
+</html>
